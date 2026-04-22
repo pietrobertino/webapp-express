@@ -20,6 +20,7 @@ function show(req, res) {
     SELECT * 
     FROM reviews
     WHERE movie_id = ?`
+    let medium_vote = 0;
 
     connection.query(movieSql, [id], (err, movieResults) => {
         if (err) return res.status(500).json({ error: 'Database query failed' });
@@ -30,6 +31,10 @@ function show(req, res) {
         connection.query(reviewsSql, [id], (err, reviewsResults) => {
             if (err) return res.status(500).json({ error: 'Database query failed' });
             movie.reviews = reviewsResults;
+            for (const review of reviewsResults) {
+                medium_vote += review.vote;
+            }
+            movie.medium_score = Math.round(medium_vote / reviewsResults.length);
             res.json(movie);
         })
 
