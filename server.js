@@ -20,13 +20,13 @@ app.get('/', (req, res) => {
 
 app.use(express.static('public')); //possibile accedere alle immagini
 
-app.use(express.json());
+app.use(express.json()); //body parser per richieste store
 
 app.use('/api/movies', movieRouter);
 
-app.use(errorsHandler);
-
 app.use(notFound);
+
+app.use(errorsHandler);
 
 app.listen(port, () => {
     console.log(`Example app listening on port http://localhost:${port}`);
